@@ -60,7 +60,7 @@ func opciónPostgres() {
 	for !salir {
 		// seleccionar operación crud
 		g1 := huh.NewGroup(
-			huh.NewSelect[string]().Value(&opcionCrud).
+			huh.NewSelect[string]().Value(&opcionCrud).Title("Seleccione una operación").
 				Options(
 					huh.NewOption("crear", "crear"),
 					huh.NewOption("mostrar", "mostrar"),
@@ -78,7 +78,7 @@ func opciónPostgres() {
 
 		// preguntar por
 		g2 := huh.NewGroup(
-			huh.NewSelect[string]().Value(&opcionTerritorio).
+			huh.NewSelect[string]().Value(&opcionTerritorio).Title("Seleccione un territorio").
 				Options(
 					huh.NewOption("provincia", "provincia"),
 					huh.NewOption("canton", "canton"),
@@ -221,7 +221,7 @@ func opciónPostgres() {
 			g2 := huh.NewGroup(
 				huh.NewConfirm().Title(
 					fmt.Sprintf("Desea borrar: %s", provinciaSeleccionada.Nombre),
-				).Value(&borrar),
+				).Value(&borrar).Affirmative("Sí").Negative("No"),
 			)
 			f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
 			f.Run()
@@ -262,7 +262,7 @@ func opciónPostgres() {
 			g2 := huh.NewGroup(
 				huh.NewConfirm().Title(
 					fmt.Sprintf("Desea borrar: %s", cantonSeleccionado.Nombre),
-				).Value(&borrar),
+				).Value(&borrar).Affirmative("Sí").Negative("No"),
 			)
 			f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
 			f.Run()
@@ -303,7 +303,7 @@ func opciónPostgres() {
 			g2 := huh.NewGroup(
 				huh.NewConfirm().Title(
 					fmt.Sprintf("Desea borrar: %s", parroquiaSeleccionada.Nombre),
-				).Value(&borrar),
+				).Value(&borrar).Affirmative("Sí").Negative("No"),
 			)
 			f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
 			f.Run()

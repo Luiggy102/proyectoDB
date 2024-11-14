@@ -7,6 +7,7 @@ import (
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/x/term"
 )
 
 var baseStyle = lipgloss.NewStyle().
@@ -47,11 +48,12 @@ func (m model) View() string {
 }
 
 func imprimirTabla(columnas []table.Column, filas []table.Row) {
+	_, altoTerminal, _ := term.GetSize(os.Stdin.Fd())
 	t := table.New(
 		table.WithColumns(columnas),
 		table.WithRows(filas),
 		table.WithFocused(true),
-		table.WithHeight(20),
+		table.WithHeight(altoTerminal-4),
 	)
 
 	s := table.DefaultStyles()
@@ -67,7 +69,7 @@ func imprimirTabla(columnas []table.Column, filas []table.Row) {
 	t.SetStyles(s)
 
 	m := model{t}
-	if _, err := tea.NewProgram(m).Run(); err != nil {
+	if _, err := tea.NewProgram(m, tea.WithAltScreen()).Run(); err != nil {
 		fmt.Println("Error running program:", err)
 		os.Exit(1)
 	}
