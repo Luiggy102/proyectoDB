@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"db1final/modelos"
+	"errors"
 	"fmt"
 	"log"
 
@@ -105,6 +106,50 @@ func (db *PostgresDb) EliminarPorId(tabla string, id string) error {
 		fmt.Sprintf("delete from %s where id = %s", tabla, id),
 	)
 	return err
+}
+
+func (db *PostgresDb) CrearProvincia(id int, nombre string) error {
+	_, err := db.Db.Exec(
+		fmt.Sprintf("insert into provincia (id, nombre) values (%d, '%s')", id, nombre),
+	)
+	return err
+}
+
+func (db *PostgresDb) CrearCanton(id int, nombre string, IdProvincia string) error {
+	_, err := db.Db.Exec(
+		fmt.Sprintf("insert into canton (id, nombre, id_provincia) values (%d, '%s', %s)", id, nombre, IdProvincia),
+	)
+	return err
+}
+func (db *PostgresDb) CrearParroquia(id int, nombre string, IdParroquia string) error {
+	_, err := db.Db.Exec(
+		fmt.Sprintf("insert into parroquia (id, nombre, id_canton) values (%d, '%s', %s)", id, nombre, IdParroquia),
+	)
+	return err
+}
+
+func (db *PostgresDb) ActualizarProvincia(id int, nuevoNombre string) error {
+	_, err := db.Db.Exec(
+		fmt.Sprintf("update provincia set nombre = '%s' where id = %d", nuevoNombre, id),
+	)
+	return err
+}
+
+func (db *PostgresDb) ActualizarCantonParroquia(tabla string, id int, idTabla string, nuevoNombre string) error {
+	switch tabla {
+	case "canton":
+		_, err := db.Db.Exec(
+			fmt.Sprintf("update canton set nombre = '%s', id_provincia = %s where id = %d", nuevoNombre, idTabla, id),
+		)
+		return err
+	case "parroquia":
+		_, err := db.Db.Exec(
+			fmt.Sprintf("update parroquia set nombre = '%s', id_canton = %s where id = %d", nuevoNombre, idTabla, id),
+		)
+		return err
+	default:
+		return errors.New("opcion invalida")
+	}
 }
 
 func (db *PostgresDb) Close() error {
