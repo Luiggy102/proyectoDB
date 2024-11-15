@@ -139,7 +139,8 @@ func (db *PostgresDb) ActualizarCantonParroquia(tabla string, id int, idTabla st
 	switch tabla {
 	case "canton":
 		_, err := db.Db.Exec(
-			fmt.Sprintf("update canton set nombre = '%s', id_provincia = %s where id = %d", nuevoNombre, idTabla, id),
+			fmt.Sprintf("update canton set nombre = '%s', id_provincia = %s where id = %d",
+				nuevoNombre, idTabla, id),
 		)
 		return err
 	case "parroquia":
