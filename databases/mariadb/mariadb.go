@@ -1,31 +1,30 @@
-package postgres
+package mariadb
 
 import (
 	"database/sql"
 	"db1final/modelos"
 	"errors"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
-
-	_ "github.com/lib/pq"
 )
 
-var Url = "postgres://ludwig@localhost:5432/ecuador?sslmode=disable"
+var Url = "root:F]anS=}G}z+3]Xc@/ecuador"
 
-type PostgresDb struct {
+type Mariadb struct {
 	Db *sql.DB
 }
 
-func NuevaDbPostgres(url string) (*PostgresDb, error) { // constructor
-	db, err := sql.Open("postgres", url)
+func NuevaDbMariadb(url string) (*Mariadb, error) { // constructor
+	db, err := sql.Open("mysql", url)
 	if err != nil {
 		return nil, err
 	}
-	return &PostgresDb{Db: db}, nil
+	return &Mariadb{Db: db}, nil
 }
 
-func (db *PostgresDb) MostrarProvincias() ([]*modelos.Provincia, error) {
-	columnas, err := db.Db.Query("select id, nombre from provincia;")
+func (db *Mariadb) MostrarProvincias() ([]*modelos.Provincia, error) {
+	columnas, err := db.Db.Query("call mostrar_provincias();")
 	if err != nil {
 		return nil, err
 	}
@@ -49,8 +48,8 @@ func (db *PostgresDb) MostrarProvincias() ([]*modelos.Provincia, error) {
 	}
 	return provincias, nil
 }
-func (db *PostgresDb) MostrarCatones() ([]*modelos.Canton, error) {
-	columnas, err := db.Db.Query("select id, nombre, id_provincia from canton")
+func (db *Mariadb) MostrarCatones() ([]*modelos.Canton, error) {
+	columnas, err := db.Db.Query("call mostrar_cantones();")
 	if err != nil {
 		return nil, err
 	}
@@ -75,8 +74,8 @@ func (db *PostgresDb) MostrarCatones() ([]*modelos.Canton, error) {
 	return cantones, nil
 }
 
-func (db *PostgresDb) MostrarParroquias() ([]*modelos.Parroquia, error) {
-	columnas, err := db.Db.Query("select id, nombre, id_canton from parroquia")
+func (db *Mariadb) MostrarParroquias() ([]*modelos.Parroquia, error) {
+	columnas, err := db.Db.Query("call mostrar_parroquia();")
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +100,7 @@ func (db *PostgresDb) MostrarParroquias() ([]*modelos.Parroquia, error) {
 	return parroquias, nil
 }
 
-func (db *PostgresDb) EliminarPorId(tabla string, id string) error {
+func (db *Mariadb) EliminarPorId(tabla string, id string) error {
 	switch tabla {
 	case "provincia":
 		_, err := db.Db.Exec(
@@ -123,34 +122,34 @@ func (db *PostgresDb) EliminarPorId(tabla string, id string) error {
 	}
 }
 
-func (db *PostgresDb) CrearProvincia(id int, nombre string) error {
+func (db *Mariadb) CrearProvincia(id int, nombre string) error {
 	_, err := db.Db.Exec(
 		fmt.Sprintf("call crear_provincia(%d,'%s')", id, nombre),
 	)
 	return err
 }
 
-func (db *PostgresDb) CrearCanton(id int, nombre string, IdProvincia string) error {
+func (db *Mariadb) CrearCanton(id int, nombre string, IdProvincia string) error {
 	_, err := db.Db.Exec(
 		fmt.Sprintf("call crear_canton(%d,'%s',%s)", id, nombre, IdProvincia),
 	)
 	return err
 }
-func (db *PostgresDb) CrearParroquia(id int, nombre string, IdParroquia string) error {
+func (db *Mariadb) CrearParroquia(id int, nombre string, IdParroquia string) error {
 	_, err := db.Db.Exec(
 		fmt.Sprintf("call crear_parroquia(%d, '%s', %s)", id, nombre, IdParroquia),
 	)
 	return err
 }
 
-func (db *PostgresDb) ActualizarProvincia(id int, nuevoNombre string) error {
+func (db *Mariadb) ActualizarProvincia(id int, nuevoNombre string) error {
 	_, err := db.Db.Exec(
 		fmt.Sprintf("call actualizar_provincia(%d, '%s')", id, nuevoNombre),
 	)
 	return err
 }
 
-func (db *PostgresDb) ActualizarCantonParroquia(tabla string, id int, idTabla string, nuevoNombre string) error {
+func (db *Mariadb) ActualizarCantonParroquia(tabla string, id int, idTabla string, nuevoNombre string) error {
 	switch tabla {
 	case "canton":
 		_, err := db.Db.Exec(
@@ -169,7 +168,7 @@ func (db *PostgresDb) ActualizarCantonParroquia(tabla string, id int, idTabla st
 	}
 }
 
-func (db *PostgresDb) Close() error {
+func (db *Mariadb) Close() error {
 	err := db.Db.Close()
 	if err != nil {
 		return err

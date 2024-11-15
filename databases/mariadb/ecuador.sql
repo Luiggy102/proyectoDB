@@ -1,8 +1,10 @@
+use mysql;
 CREATE DATABASE IF NOT EXISTS ecuador;
+use ecuador;
 DROP TABLE IF EXISTS provincia;
 
 CREATE TABLE provincia(
-  id serial not null,
+  id BIGINT not null,
   nombre TEXT,
   PRIMARY KEY (id)
 );
@@ -37,7 +39,7 @@ INSERT INTO provincia VALUES
 DROP TABLE IF EXISTS canton;
 
 CREATE TABLE canton(
-  id serial not null,
+  id BIGINT not null,
   nombre TEXT,
   id_provincia BIGINT,
   PRIMARY KEY (id),
@@ -273,7 +275,7 @@ INSERT INTO canton VALUES
 DROP TABLE IF EXISTS parroquia;
 
 CREATE TABLE parroquia(
-  id serial not null,
+  id BIGINT not null,
   nombre TEXT ,
   id_canton BIGINT ,
   PRIMARY KEY (id),

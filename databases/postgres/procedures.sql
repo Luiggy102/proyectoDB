@@ -29,11 +29,25 @@ FROM parroquia;
 $$;
 
 ------------------- Borrar (delete) ---------------------
-CREATE PROCEDURE borrar_por_id (tabla TEXT, ID BIGINT)
+CREATE PROCEDURE borrar_provincia (PID BIGINT)
 LANGUAGE SQL
 AS $$
-DELETE FROM tabla
-    WHERE id = ID;
+    DELETE FROM provincia
+        WHERE id = PID;
+$$;
+
+CREATE PROCEDURE borrar_canton (CID BIGINT)
+LANGUAGE SQL
+AS $$
+    DELETE FROM canton
+        WHERE id = CID;
+$$;
+
+CREATE PROCEDURE borrar_parroquia (PID BIGINT)
+LANGUAGE SQL
+AS $$
+    DELETE FROM parroquia
+        WHERE id = PID;
 $$;
 
 ------------------ crear (insert) -----------------------
@@ -62,26 +76,26 @@ INSERT INTO parroquia (
 $$;
 
 ------------------ actualizar (update) ---------------------------
-CREATE PROCEDURE actualizar_provincia (ID BIGINT, NUEVO_NOMBRE TEXT)
+CREATE PROCEDURE actualizar_provincia (PID BIGINT, NUEVO_NOMBRE TEXT)
 LANGUAGE SQL
 AS $$
 UPDATE provincia
     SET nombre = NUEVO_NOMBRE
-    WHERE id = ID;
+    WHERE id = PID;
 $$;
 
-CREATE PROCEDURE actualizar_canton (ID BIGINT, NUEVO_NOMBRE TEXT, ID_PROVINCIA BIGINT)
+CREATE PROCEDURE actualizar_canton (CID BIGINT, NUEVO_NOMBRE TEXT, ID_PROVINCIA BIGINT)
 LANGUAGE SQL
 AS $$
 UPDATE canton
     SET nombre = NUEVO_NOMBRE, id_provincia = ID_PROVINCIA
-    WHERE id = ID;
+    WHERE id = CID;
 $$;
 
-CREATE PROCEDURE actualizar_parroquia (ID BIGINT, NUEVO_NOMBRE TEXT, ID_CANTON BIGINT)
+CREATE PROCEDURE actualizar_parroquia (PID BIGINT, NUEVO_NOMBRE TEXT, ID_CANTON BIGINT)
 LANGUAGE SQL
 AS $$
 UPDATE parroquia
     SET nombre = NUEVO_NOMBRE, id_canton = ID_CANTON
-    WHERE id = ID;
+    WHERE id = PID;
 $$;

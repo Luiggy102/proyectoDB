@@ -1,0 +1,22 @@
+services:
+  postgres:
+    container_name: postgresdb
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    ports:
+      - 54321:5432
+  mariadb:
+    container_name: dbmariadb
+    build:
+      context: ./mariadb
+      dockerfile: Dockerfile
+    ports:
+      - 33006:3306
+  sqlserver:
+    container_name: sqlserverdb
+    build:
+      context: ./sqlserver
+      dockerfile: Dockerfile
+    ports:
+      - 14333:1433
