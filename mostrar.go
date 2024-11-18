@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"strconv"
 
-	btable "github.com/charmbracelet/bubbles/table"
+	"github.com/charmbracelet/bubbles/table"
 )
 
 func MostrarProvincias(db db) {
-	columna := []btable.Column{
+	columna := []table.Column{
 		{Title: "ID", Width: 10}, {Title: "Nombre", Width: 90},
 	}
 	provincias, _ := db.MostrarProvincias()
@@ -18,7 +18,7 @@ func MostrarProvincias(db db) {
 			strconv.Itoa(p.Id), p.Nombre,
 		})
 	}
-	filas := []btable.Row{}
+	filas := []table.Row{}
 	for i := 0; i < len(datos); i++ {
 		filas = append(filas, datos[i])
 	}
@@ -26,7 +26,7 @@ func MostrarProvincias(db db) {
 	imprimirTabla(columna, filas)
 }
 func MostrarCantones(db db) {
-	columna := []btable.Column{
+	columna := []table.Column{
 		{Title: "ID", Width: 10}, {Title: "Nombre", Width: 40}, {Title: "Provincia", Width: 40},
 	}
 	cantones, _ := db.MostrarCatones()
@@ -43,7 +43,7 @@ func MostrarCantones(db db) {
 			strconv.Itoa(c.Id), c.Nombre, provincia,
 		})
 	}
-	filas := []btable.Row{}
+	filas := []table.Row{}
 	for i := 0; i < len(datos); i++ {
 		filas = append(filas, datos[i])
 	}
@@ -52,7 +52,7 @@ func MostrarCantones(db db) {
 
 }
 func MostrarParroquias(db db) {
-	columna := []btable.Column{
+	columna := []table.Column{
 		{Title: "ID", Width: 10}, {Title: "Nombre", Width: 40}, {Title: "Canton", Width: 40},
 	}
 	parroquias, _ := db.MostrarParroquias()
@@ -69,7 +69,7 @@ func MostrarParroquias(db db) {
 			strconv.Itoa(par.Id), par.Nombre, canton,
 		})
 	}
-	filas := []btable.Row{}
+	filas := []table.Row{}
 	for i := 0; i < len(datos); i++ {
 		filas = append(filas, datos[i])
 	}
