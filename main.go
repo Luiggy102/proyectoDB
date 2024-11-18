@@ -4,11 +4,14 @@ import (
 	"db1final/databases/mariadb"
 	"db1final/databases/postgres"
 	"db1final/databases/sqlserver"
+	"fmt"
 	"log"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/charmbracelet/huh"
+	"github.com/charmbracelet/huh/spinner"
 )
 
 // presentación y selección de db
@@ -16,7 +19,7 @@ func Intro() *string {
 	var db string
 	presentación := huh.NewNote().
 		Title("Proyecto final de Bases de Datos 1").
-		Description("Integrantes:\n\t*Luiggy Tamayo*\n\t*Foy Barba*\n\t*Andrés Vallejo*")
+		Description("Integrantes:\n\t*- Luiggy Tamayo*\n\t*- Foy Barba*\n\t*- Andrés Vallejo*")
 	selecciónDb := huh.NewSelect[string]().
 		Options(huh.NewOptions("Postgres", "Mariadb", "sqlserver", "salir")...).
 		Value(&db).
@@ -29,16 +32,15 @@ func Intro() *string {
 	if err := formulario.Run(); err != nil {
 		log.Fatal(err)
 	}
-	// if db != "salir" {
-	// 	err := spinner.New().
-	// 		Title(fmt.Sprintf("Conectando a base de datos %s...", db)).
-	// 		Action(func() { time.Sleep(time.Second * 5) }).
-	// 		Run()
-	// 	if err != nil {
-	// 		panic(err)
-	// 	}
-	//
-	// }
+	if db != "salir" {
+		err := spinner.New().
+			Title(fmt.Sprintf("Conectando a base de datos %s...", db)).
+			Action(func() { time.Sleep(time.Second * 3) }).
+			Run()
+		if err != nil {
+			panic(err)
+		}
+	}
 	return &db
 }
 
@@ -74,7 +76,8 @@ func InicarApp(opcion string) bool {
 	for !salir {
 		// seleccionar operación crud
 		g1 := huh.NewGroup(
-			huh.NewSelect[string]().Value(&opcionCrud).Title("Seleccione una operación").
+			huh.NewSelect[string]().Value(&opcionCrud).
+				Title(fmt.Sprintf("Seleccione una operación CRUD [%s]", opcion)).
 				Options(
 					huh.NewOption("crear", "crear"),
 					huh.NewOption("mostrar", "mostrar"),
