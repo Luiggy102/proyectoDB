@@ -4,14 +4,11 @@ import (
 	"db1final/databases/mariadb"
 	"db1final/databases/postgres"
 	"db1final/databases/sqlserver"
-	"fmt"
 	"log"
-	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/charmbracelet/huh"
-	"github.com/charmbracelet/huh/spinner"
 )
 
 // presentación y selección de db
@@ -32,17 +29,20 @@ func Intro() *string {
 	if err := formulario.Run(); err != nil {
 		log.Fatal(err)
 	}
-	err := spinner.New().
-		Title(fmt.Sprintf("Conectando a base de datos %s...", db)).
-		Action(func() { time.Sleep(time.Second * 2) }).
-		Run()
-	if err != nil {
-		panic(err)
-	}
+	// if db != "salir" {
+	// 	err := spinner.New().
+	// 		Title(fmt.Sprintf("Conectando a base de datos %s...", db)).
+	// 		Action(func() { time.Sleep(time.Second * 5) }).
+	// 		Run()
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	//
+	// }
 	return &db
 }
 
-func InicarApp(opcion string) {
+func InicarApp(opcion string) bool {
 	var db db
 	var err error
 
@@ -63,7 +63,7 @@ func InicarApp(opcion string) {
 			panic(err)
 		}
 	case "salir":
-		return
+		return true
 	}
 	defer db.Close()
 
@@ -80,7 +80,7 @@ func InicarApp(opcion string) {
 					huh.NewOption("mostrar", "mostrar"),
 					huh.NewOption("actualizar", "actualizar"),
 					huh.NewOption("borrar", "borrar"),
-					huh.NewOption("salir", "salir"),
+					huh.NewOption("volver", "volver"),
 				),
 		)
 		f := huh.NewForm(g1).WithProgramOptions(tea.WithAltScreen())
@@ -89,8 +89,8 @@ func InicarApp(opcion string) {
 			panic(err)
 		}
 
-		if opcionCrud == "salir" {
-			return
+		if opcionCrud == "volver" {
+			return true
 		}
 
 		// preguntar por
@@ -154,9 +154,19 @@ func InicarApp(opcion string) {
 			ActualizarParroquia(db)
 		}
 	}
+	return false
 }
 
 func main() {
-	db := *Intro()
-	InicarApp(db)
+	var opcion string
+	var volver bool
+	for {
+		opcion = *Intro()
+		for !volver {
+			volver = InicarApp(opcion)
+		}
+		if opcion == "salir" {
+			return
+		}
+	}
 }
