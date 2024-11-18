@@ -159,14 +159,11 @@ func InicarApp(opcion string) bool {
 
 func main() {
 	var opcion string
-	var volver bool
 	for {
 		opcion = *Intro()
-		for !volver {
-			volver = InicarApp(opcion)
-		}
 		if opcion == "salir" {
 			return
 		}
+		InicarApp(opcion)
 	}
 }
