@@ -78,7 +78,10 @@ func InicarApp(opcion string) {
 				),
 		)
 		f := huh.NewForm(g1).WithProgramOptions(tea.WithAltScreen())
-		f.Run()
+		err = f.Run()
+		if err != nil {
+			panic(err)
+		}
 
 		if opcionCrud == "salir" {
 			return
@@ -94,7 +97,10 @@ func InicarApp(opcion string) {
 				),
 		)
 		f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
-		f.Run()
+		err = f.Run()
+		if err != nil {
+			panic(err)
+		}
 
 		// casos
 		if opcionCrud == "mostrar" && opcionTerritorio == "provincia" {
@@ -232,7 +238,10 @@ func InicarApp(opcion string) {
 				).Value(&borrar).Affirmative("Sí").Negative("No"),
 			)
 			f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			// menu de borrado
 			if borrar {
@@ -264,7 +273,10 @@ func InicarApp(opcion string) {
 					Options(opciones...),
 			)
 			f := huh.NewForm(g1).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			var borrar bool
 			g2 := huh.NewGroup(
@@ -273,7 +285,10 @@ func InicarApp(opcion string) {
 				).Value(&borrar).Affirmative("Sí").Negative("No"),
 			)
 			f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			// menu de borrado
 			if borrar {
@@ -305,7 +320,10 @@ func InicarApp(opcion string) {
 					Options(opciones...),
 			)
 			f := huh.NewForm(g1).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			var borrar bool
 			g2 := huh.NewGroup(
@@ -314,7 +332,10 @@ func InicarApp(opcion string) {
 				).Value(&borrar).Affirmative("Sí").Negative("No"),
 			)
 			f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			// menu de borrado
 			if borrar {
@@ -341,7 +362,10 @@ func InicarApp(opcion string) {
 				huh.NewInput().Value(&nuevoNombre).Title("Ingrese nueva provincia"),
 			)
 			f := huh.NewForm(g1).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			err := db.CrearProvincia(idNuevo, nuevoNombre)
 			if err != nil {
@@ -380,7 +404,10 @@ func InicarApp(opcion string) {
 			)
 
 			f = huh.NewForm(g1).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			err := db.CrearCanton(idNuevo, nuevoNombre, strconv.Itoa(provinciaSeleccionada.Id))
 			if err != nil {
@@ -417,7 +444,10 @@ func InicarApp(opcion string) {
 			)
 
 			f = huh.NewForm(g1).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			err = db.CrearParroquia(idNuevo, nuevoNombre, strconv.Itoa(canton.Id))
 			if err != nil {
@@ -444,7 +474,10 @@ func InicarApp(opcion string) {
 			g2 := huh.NewGroup(huh.NewInput().Value(&nuevoNombre).Title("Escriba el nuevo nombre"))
 
 			f = huh.NewForm(g1, g2).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 
 			err = db.ActualizarProvincia(provinciaSeleccionada.Id, nuevoNombre)
 			if err != nil {
@@ -463,7 +496,10 @@ func InicarApp(opcion string) {
 				huh.NewInput().Value(&nuevoNombre).Title("Ingrese Nuevo nombre"),
 			)
 			f := huh.NewForm(g1).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 			// colocar a que provincia debe pertenercer
 			fmt.Println("Ingrese nueva provincia para el canton")
 			provincia, _ := seleccionarProvincia(provincias)
@@ -487,7 +523,10 @@ func InicarApp(opcion string) {
 					huh.NewInput().Value(&nuevo).Title("Coloque nuevo nombre para parroquia"),
 				),
 			).WithProgramOptions(tea.WithAltScreen())
-			f.Run()
+			err = f.Run()
+			if err != nil {
+				panic(err)
+			}
 			// colocar a que canton debe pertenercer
 			seleccionCanton, _ = seleccionarCanton(cantones)
 			// cambiar en db
