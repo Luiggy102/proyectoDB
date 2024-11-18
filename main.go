@@ -4,11 +4,14 @@ import (
 	"db1final/databases/mariadb"
 	"db1final/databases/postgres"
 	"db1final/databases/sqlserver"
+	"fmt"
 	"log"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 
 	"github.com/charmbracelet/huh"
+	"github.com/charmbracelet/huh/spinner"
 )
 
 // presentación y selección de db
@@ -28,6 +31,13 @@ func Intro() *string {
 	formulario := huh.NewForm(grupo).WithProgramOptions(tea.WithAltScreen())
 	if err := formulario.Run(); err != nil {
 		log.Fatal(err)
+	}
+	err := spinner.New().
+		Title(fmt.Sprintf("Conectando a base de datos %s...", db)).
+		Action(func() { time.Sleep(time.Second * 2) }).
+		Run()
+	if err != nil {
+		panic(err)
 	}
 	return &db
 }

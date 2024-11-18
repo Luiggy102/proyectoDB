@@ -34,11 +34,24 @@ func ActualizarProvincia(db db) {
 		panic(err)
 	}
 
-	err = db.ActualizarProvincia(provinciaSeleccionada.Id, nuevoNombre)
+	var actualizar bool
+	g3 := huh.NewGroup(
+		huh.NewConfirm().Title(
+			fmt.Sprintf("Desea actualizar: %s", nuevoNombre),
+		).Value(&actualizar).Affirmative("Sí").Negative("No"),
+	)
+	f = huh.NewForm(g3).WithProgramOptions(tea.WithAltScreen())
+	err = f.Run()
 	if err != nil {
 		panic(err)
 	}
 
+	if actualizar {
+		err = db.ActualizarProvincia(provinciaSeleccionada.Id, nuevoNombre)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 func ActualizarCaton(db db) {
 	cantones, _ := db.MostrarCatones()
@@ -58,10 +71,25 @@ func ActualizarCaton(db db) {
 	// colocar a que provincia debe pertenercer
 	fmt.Println("Ingrese nueva provincia para el canton")
 	provincia, _ := seleccionarProvincia(provincias)
-	// actualizar en db
-	err = db.ActualizarCantonParroquia("canton", cantonParaActualizar.Id, strconv.Itoa(provincia.Id), nuevoNombre)
+
+	var actualizar bool
+	g3 := huh.NewGroup(
+		huh.NewConfirm().Title(
+			fmt.Sprintf("Desea actualizar: %s", nuevoNombre),
+		).Value(&actualizar).Affirmative("Sí").Negative("No"),
+	)
+	f = huh.NewForm(g3).WithProgramOptions(tea.WithAltScreen())
+	err = f.Run()
 	if err != nil {
 		panic(err)
+	}
+
+	if actualizar {
+		// actualizar en db
+		err = db.ActualizarCantonParroquia("canton", cantonParaActualizar.Id, strconv.Itoa(provincia.Id), nuevoNombre)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 }
@@ -85,10 +113,24 @@ func ActualizarParroquia(db db) {
 	}
 	// colocar a que canton debe pertenercer
 	seleccionCanton, _ = seleccionarCanton(cantones)
-	// cambiar en db
-	err = db.ActualizarCantonParroquia("parroquia", seleccionParroquia.Id, strconv.Itoa(seleccionCanton.Id), nuevo)
+
+	var actualizar bool
+	g3 := huh.NewGroup(
+		huh.NewConfirm().Title(
+			fmt.Sprintf("Desea actualizar: %s", nuevo),
+		).Value(&actualizar).Affirmative("Sí").Negative("No"),
+	)
+	f = huh.NewForm(g3).WithProgramOptions(tea.WithAltScreen())
+	err = f.Run()
 	if err != nil {
 		panic(err)
 	}
 
+	if actualizar {
+		// cambiar en db
+		err = db.ActualizarCantonParroquia("parroquia", seleccionParroquia.Id, strconv.Itoa(seleccionCanton.Id), nuevo)
+		if err != nil {
+			panic(err)
+		}
+	}
 }

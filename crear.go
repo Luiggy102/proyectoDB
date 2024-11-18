@@ -2,6 +2,7 @@ package main
 
 import (
 	"db1final/modelos"
+	"fmt"
 	"slices"
 	"strconv"
 
@@ -31,9 +32,23 @@ func CrearProvincia(db db) {
 		panic(err)
 	}
 
-	err = db.CrearProvincia(idNuevo, nuevoNombre)
+	var crear bool
+	g2 := huh.NewGroup(
+		huh.NewConfirm().Title(
+			fmt.Sprintf("Desea crear: %s", nuevoNombre),
+		).Value(&crear).Affirmative("Sí").Negative("No"),
+	)
+	f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
+	err = f.Run()
 	if err != nil {
 		panic(err)
+	}
+
+	if crear {
+		err = db.CrearProvincia(idNuevo, nuevoNombre)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 }
@@ -74,9 +89,22 @@ func CrearCanton(db db) {
 		panic(err)
 	}
 
-	err = db.CrearCanton(idNuevo, nuevoNombre, strconv.Itoa(provinciaSeleccionada.Id))
+	var crear bool
+	g2 := huh.NewGroup(
+		huh.NewConfirm().Title(
+			fmt.Sprintf("Desea crear: %s", nuevoNombre),
+		).Value(&crear).Affirmative("Sí").Negative("No"),
+	)
+	f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
+	err = f.Run()
 	if err != nil {
 		panic(err)
+	}
+	if crear {
+		err = db.CrearCanton(idNuevo, nuevoNombre, strconv.Itoa(provinciaSeleccionada.Id))
+		if err != nil {
+			panic(err)
+		}
 	}
 
 }
@@ -115,9 +143,22 @@ func CrearParroquia(db db) {
 		panic(err)
 	}
 
-	err = db.CrearParroquia(idNuevo, nuevoNombre, strconv.Itoa(canton.Id))
+	var crear bool
+	g2 := huh.NewGroup(
+		huh.NewConfirm().Title(
+			fmt.Sprintf("Desea crear: %s", nuevoNombre),
+		).Value(&crear).Affirmative("Sí").Negative("No"),
+	)
+	f = huh.NewForm(g2).WithProgramOptions(tea.WithAltScreen())
+	err = f.Run()
 	if err != nil {
 		panic(err)
 	}
 
+	if crear {
+		err = db.CrearParroquia(idNuevo, nuevoNombre, strconv.Itoa(canton.Id))
+		if err != nil {
+			panic(err)
+		}
+	}
 }
