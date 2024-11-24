@@ -17,8 +17,9 @@ func Intro() *string {
 	presentación := huh.NewNote().
 		Title("Proyecto final de Bases de Datos 1").
 		Description("Integrantes:\n\t*- Luiggy Tamayo*\n\t*- Foy Barba*\n\t*- Andrés Vallejo*")
+		// Description("Integrantes:\n\t*- Luiggy Tamayo*\n\t*- Foy Barba*")
 	selecciónDb := huh.NewSelect[string]().
-		Options(huh.NewOptions("Postgres", "Mariadb", "sqlserver", "salir")...).
+		Options(huh.NewOptions("Postgres", "Mariadb", "Sqlserver", "Salir")...).
 		Value(&db).
 		Title("Elija la base de datos a usar:")
 	grupo := huh.NewGroup(
@@ -56,12 +57,12 @@ func InicarApp(opcion string) bool {
 		if err != nil {
 			panic(err)
 		}
-	case "sqlserver":
+	case "Sqlserver":
 		db, err = sqlserver.NuevaDBSqlServer(sqlserver.Url)
 		if err != nil {
 			panic(err)
 		}
-	case "salir":
+	case "Salir":
 		return true
 	}
 	defer db.Close()
@@ -161,7 +162,7 @@ func main() {
 	var opcion string
 	for {
 		opcion = *Intro()
-		if opcion == "salir" {
+		if opcion == "Salir" {
 			return
 		}
 		InicarApp(opcion)
